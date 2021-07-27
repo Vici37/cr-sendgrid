@@ -1,6 +1,10 @@
 name: sendgrid
 version: 0.1.0
 
+development_dependencies:
+  webmock:
+    github: manastech/webmock.cr
+
 authors:
   - Troy Sornson <troy@sornson.io>
 
