@@ -6,7 +6,6 @@ module Sendgrid
   class Client
     def initialize(@api_key : String, address : String = "https://api.sendgrid.com/v3/mail/send")
       @uri = URI.parse(address)
-      @client = HTTP::Client.new(@uri)
       @logger = ::Log.for(Sendgrid)
     end
 
@@ -36,7 +35,7 @@ module Sendgrid
     end
 
     def send(message : Message)
-      @client.post(@uri.path, request_headers, message.to_json)
+      HTTP::Client.post(@uri, request_headers, message.to_json)
     end
 
     private def construct_message(
