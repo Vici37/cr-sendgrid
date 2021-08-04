@@ -7,7 +7,7 @@ module Sendgrid
     personalizations : Array(Personalization),
     from : Address,
     subject : String,
-    content : Array(Content),
+    content : Array(Content)? = nil,
     reply_to : Address? = nil,
     template_id : String? = nil,
     headers : Hash(String, String)? = nil,

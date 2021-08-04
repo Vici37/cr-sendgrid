@@ -9,7 +9,7 @@ This library provides a client interface to [Sendgrid's mailing API](https://doc
    ```yaml
    dependencies:
      sendgrid:
-       github: your-github-user/cr-sendgrid
+       github: vici37/cr-sendgrid
    ```
 
 2. Run `shards install`

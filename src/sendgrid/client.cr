@@ -34,25 +34,25 @@ module Sendgrid
       )
     end
 
+    def message(
+      to : String | Hash(String, String) | Array(String), # email, name => email, or a list of emails
+      from : String | NamedTuple(name: String, email: String),
+      subject : String,
+      template_id : String,
+      template_data : Hash(String, String)
+    )
+      to_addresses = construct_to(to)
+      from_address = construct_from(from)
+      personalizations = [Personalization.new(to: to_addresses, dynamic_template_data: template_data)]
+
+      Message.new(personalizations: personalizations, from: from_address, subject: subject, template_id: template_id)
+    end
+
     def send(message : Message)
       HTTP::Client.post(@uri, request_headers, message.to_json)
     end
 
-    private def construct_message(
-      to : String | Hash(String, String) | Array(String), # email, name => email, or a list of emails
-      from : String | NamedTuple(name: String, email: String),
-      subject : String,
-      content : String,
-      content_type : String = "text/plain"
-    )
-      to_addresses = construct_to(to)
-      from_address = construct_from(from)
-      personalizations = [Personalization.new(to: to_addresses)]
-
-      Message.new(personalizations: personalizations, from: from_address, subject: subject, content: [Content.new(type: content_type, value: content)])
-    end
-
-    private def construct_to(to : String | Hash(String, String) | Array(String)) : Array(Address)
+    def construct_to(to : String | Hash(String, String) | Array(String)) : Array(Address)
       if to.is_a?(String)
         return [Address.new(email: to)]
       elsif to.is_a?(Hash(String, String))
@@ -62,7 +62,7 @@ module Sendgrid
       end
     end
 
-    private def construct_from(from : String | NamedTuple(name: String, email: String)) : Address
+    def construct_from(from : String | NamedTuple(name: String, email: String)) : Address
       if from.is_a?(String)
         return Address.new(email: from)
       else
